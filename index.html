@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Exercices basiques</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700;800;900&family=SF+Pro+Text:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Effet d'eau liquide Apple-style */
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 122, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 45, 85, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 60%, rgba(52, 199, 89, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 30%, rgba(255, 204, 0, 0.06) 0%, transparent 50%);
+            animation: liquidFlow 25s ease-in-out infinite;
+        }
+        
+        @keyframes liquidFlow {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1);
+                opacity: 0.8;
+            }
+            25% { 
+                transform: translateY(-30px) rotate(0.5deg) scale(1.02);
+                opacity: 0.9;
+            }
+            50% { 
+                transform: translateY(0px) rotate(0deg) scale(1);
+                opacity: 0.7;
+            }
+            75% { 
+                transform: translateY(20px) rotate(-0.3deg) scale(0.98);
+                opacity: 0.85;
+            }
+        }
+        
+        /* Effet de verre Apple avec reflets d'eau */
+        .glass-water-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(255, 255, 255, 0.01) 50%, transparent 70%);
+            animation: waterReflection 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes waterReflection {
+            0%, 100% { 
+                transform: translateX(0px) translateY(0px);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateX(20px) translateY(-10px);
+                opacity: 0.6;
+            }
+        }
+        
+        /* Particules d'eau Apple-style */
+        .water-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .water-drop {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 70%, transparent 100%);
+            border-radius: 50%;
+            animation: waterDrop 20s infinite linear;
+        }
+        
+        @keyframes waterDrop {
+            0% { 
+                transform: translateY(100vh) translateX(0px) scale(0);
+                opacity: 0;
+            }
+            5% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            95% { 
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translateY(-100px) translateX(50px) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Carte principale avec effet de verre Apple */
+        .main-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 32px;
+            padding: 60px;
+            box-shadow: 
+                0 32px 64px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Effet de reflet d'eau sur la carte */
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            animation: waterRipple 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes waterRipple {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+        
+        /* Effet de brillance Apple */
+        .main-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: appleShimmer 4s infinite;
+        }
+        
+        @keyframes appleShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        h1 {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.4rem;
+            margin-bottom: 60px;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Instructions avec effet de verre Apple */
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 24px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .instructions::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .instructions h3 {
+            color: #ffffff;
+            font-family: 'SF Pro Display', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        
+        .instructions p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ol {
+            color: rgba(255, 255, 255, 0.7);
+            padding-left: 24px;
+            font-size: 1.05rem;
+        }
+        
+        .instructions li {
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .instructions li::marker {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .script-selector {
+            margin: 50px 0;
+            text-align: center;
+        }
+        
+        .script-selector label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3rem;
+            margin-bottom: 24px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+        
+        select {
+            padding: 20px 32px;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            backdrop-filter: blur(20px);
+            margin-right: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 350px;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        select option {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
+            color: white;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-family: 'SF Pro Text', sans-serif;
+            letter-spacing: -0.01em;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 122, 255, 0.3);
+            background: linear-gradient(135deg, #0080FF 0%, #0066CC 100%);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .console-info {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 32px;
+            border-radius: 20px;
+            margin: 40px 0;
+            position: relative;
+            backdrop-filter: blur(20px);
+        }
+        
+        .console-info::before {
+            content: '💻';
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            background: #000000;
+            padding: 0 12px;
+            font-size: 1.3rem;
+        }
+        
+        .console-info h4 {
+            color: #ffffff;
+            font-family: 'SF Pro Display', sans-serif;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .console-info ul {
+            color: rgba(255, 255, 255, 0.8);
+            list-style: none;
+            padding: 0;
+        }
+        
+        .console-info li {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+            font-size: 1.05rem;
+        }
+        
+        .console-info li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #007AFF;
+        }
+        
+        .console-info p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .main-card { padding: 40px 30px; }
+            select { min-width: 280px; margin-bottom: 20px; }
+            button { margin-top: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Effet d'eau liquide Apple-style -->
+    <div class="liquid-bg"></div>
+    
+    <!-- Effet de verre avec reflets d'eau -->
+    <div class="glass-water-effect"></div>
+    
+    <!-- Particules d'eau Apple-style -->
+    <div class="water-particles" id="water-particles"></div>
+    
+    <div class="container">
+        <div class="main-card">
+            <h1>🚀 JavaScript - Exercices basiques</h1>
+            <p class="subtitle">Plongez dans l'univers du code avec des exercices interactifs</p>
+            
+            <div class="instructions">
+                <h3>📋 Instructions</h3>
+                <p>Ce projet contient 7 exercices JavaScript basiques. Pour tester chaque exercice :</p>
+                <ol>
+                    <li>Sélectionnez le script à exécuter dans le menu déroulant</li>
+                    <li>Cliquez sur "Charger le script"</li>
+                    <li>Ouvrez la console de votre navigateur (F12 → Console)</li>
+                    <li>Suivez les instructions affichées dans la console</li>
+                </ol>
+            </div>
+
+            <div class="script-selector">
+                <label for="scriptSelect">Choisissez un exercice :</label>
+                <select id="scriptSelect">
+                    <option value="script_1.js">Script 1: Hello World</option>
+                    <option value="script_2.js">Script 2: Calculatrice de factorielle</option>
+                    <option value="script_3.js">Script 3: Pyramide de Mario</option>
+                    <option value="script_4.js">Script 4: Analyse des entrepreneurs</option>
+                    <option value="script_5.js">Script 5: Bibliothécaire</option>
+                    <option value="script_6.js">Script 6: Code génétique</option>
+                    <option value="script_7.js">Script 7: Acné-Bot</option>
+                </select>
+                <button onclick="loadScript()">Charger le script</button>
+            </div>
+
+            <div class="console-info">
+                <h4>💻 Comment ouvrir la console :</h4>
+                <ul>
+                    <li><strong>Linux/Windows :</strong> F12 puis onglet "Console"</li>
+                    <li><strong>Mac :</strong> Alt + Cmd + I</li>
+                </ul>
+                <p>Les résultats des exercices s'afficheront dans la console du navigateur.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour créer les gouttes d'eau Apple-style
+        function createWaterDrops() {
+            const waterContainer = document.getElementById('water-particles');
+            const dropCount = 30;
+            
+            for (let i = 0; i < dropCount; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'water-drop';
+                
+                // Taille aléatoire pour les gouttes
+                const size = Math.random() * 8 + 4;
+                drop.style.width = size + 'px';
+                drop.style.height = size + 'px';
+                
+                // Position de départ aléatoire
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDelay = Math.random() * 20 + 's';
+                drop.style.animationDuration = (Math.random() * 15 + 15) + 's';
+                
+                waterContainer.appendChild(drop);
+            }
+        }
+        
+        // Fonction pour charger un script
+        function loadScript() {
+            const scriptSelect = document.getElementById('scriptSelect');
+            const selectedScript = scriptSelect.value;
+            
+            // Supprimer l'ancien script s'il existe
+            const oldScript = document.querySelector('script[src*="script_"]');
+            if (oldScript) {
+                oldScript.remove();
+            }
+            
+            // Effet visuel sur le bouton
+            const button = document.querySelector('button');
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 150);
+            
+            // Charger le nouveau script
+            const script = document.createElement('script');
+            script.src = selectedScript;
+            script.onload = function() {
+                console.log(`✅ Script ${selectedScript} chargé avec succès !`);
+                // Effet de notification visuelle
+                showNotification('Script chargé avec succès !', 'success');
+            };
+            script.onerror = function() {
+                console.error(`❌ Erreur lors du chargement de ${selectedScript}`);
+                showNotification('Erreur lors du chargement du script', 'error');
+            };
+            document.head.appendChild(script);
+        }
+        
+        // Fonction pour afficher des notifications
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                background: ${type === 'success' ? 'linear-gradient(45deg, #00ff00, #00cc00)' : 'linear-gradient(45deg, #ff0000, #cc0000)'};
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Animation d'entrée
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Suppression automatique
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Effet de parallaxe Apple-style avec l'eau
+        function initAppleParallax() {
+            document.addEventListener('mousemove', (e) => {
+                const liquidBg = document.querySelector('.liquid-bg');
+                const glassEffect = document.querySelector('.glass-water-effect');
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                // Mouvement fluide de l'eau
+                liquidBg.style.transform = `translate(${x * 15}px, ${y * 15}px) scale(${1 + x * 0.02})`;
+                
+                // Reflets de verre qui suivent la souris
+                glassEffect.style.transform = `translate(${x * 10}px, ${y * 10}px) rotate(${x * 2}deg)`;
+            });
+        }
+        
+        // Effet de ripple d'eau sur clic
+        function initWaterRipple() {
+            document.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.style.cssText = `
+                    position: fixed;
+                    left: ${e.clientX}px;
+                    top: ${e.clientY}px;
+                    width: 0;
+                    height: 0;
+                    border-radius: 50%;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+                    transform: translate(-50%, -50%);
+                    animation: ripple 1s ease-out;
+                    pointer-events: none;
+                    z-index: 1000;
+                `;
+                
+                document.body.appendChild(ripple);
+                
+                // Animation CSS pour le ripple
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes ripple {
+                        0% { width: 0; height: 0; opacity: 1; }
+                        100% { width: 200px; height: 200px; opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                setTimeout(() => {
+                    document.body.removeChild(ripple);
+                }, 1000);
+            });
+        }
+        
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            createWaterDrops();
+            initAppleParallax();
+            initWaterRipple();
+            
+            // Effet de typing Apple-style sur le titre
+            const title = document.querySelector('h1');
+            const originalText = title.textContent;
+            title.textContent = '';
+            let i = 0;
+            
+            function typeWriter() {
+                if (i < originalText.length) {
+                    title.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 80);
+                }
+            }
+            
+            setTimeout(typeWriter, 800);
+        });
+        
+        // Effet de hover sur les éléments interactifs
+        document.addEventListener('DOMContentLoaded', function() {
+            const interactiveElements = document.querySelectorAll('select, button, .instructions, .console-info');
+            
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
